@@ -3,80 +3,398 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
   <title>Games</title>
   <link rel="icon" type="image/png" href="games/solitaire/favicon.png">
   <style>
+    :root {
+      --bg-1: #2a1b3d;
+      --bg-2: #1b1f3b;
+      --bg-3: #141428;
+      --panel: rgba(255, 255, 255, 0.045);
+      --panel-hover: rgba(255, 255, 255, 0.075);
+      --border: rgba(255, 255, 255, 0.10);
+      --border-hover: rgba(255, 255, 255, 0.22);
+      --text: #eceaf4;
+      --muted: #9b98b3;
+      --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    }
     * { box-sizing: border-box; }
+    html { min-height: 100%; background: var(--bg-3); }
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: Tahoma, Verdana, "Segoe UI", sans-serif;
-      background: linear-gradient(#3a6ea5, #245edb 40%, #1941a5);
-      color: #fff;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(1200px 700px at 0% 0%, rgba(124, 58, 237, 0.22), transparent 60%),
+        radial-gradient(900px 600px at 100% 10%, rgba(59, 130, 246, 0.16), transparent 60%),
+        linear-gradient(160deg, var(--bg-1), var(--bg-2) 45%, var(--bg-3));
+      background-attachment: fixed;
     }
-    header {
-      padding: 28px 24px 8px;
-      text-align: center;
-    }
-    header h1 { margin: 0; font-size: 32px; text-shadow: 1px 2px 2px rgba(0,0,0,.4); }
-    header p { margin: 6px 0 0; opacity: .85; }
-    #games {
+
+    /* ---------- top bar ---------- */
+    .topbar {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-      max-width: 1000px;
-      margin: 24px auto;
-      padding: 0 20px;
-    }
-    .game {
-      display: flex;
-      flex-direction: column;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      gap: 10px;
-      padding: 20px;
-      text-decoration: none;
-      color: #000;
-      background: #ece9d8;
-      border: 3px solid #0831d9;
-      border-radius: 8px;
-      box-shadow: 3px 3px 10px rgba(0,0,0,.4);
-      transition: transform .12s;
+      gap: 16px;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 20px 24px;
     }
-    .game:hover { transform: translateY(-3px); }
-    .game img { width: 72px; height: 72px; image-rendering: auto; }
-    .game h2 { margin: 0; font-size: 18px; }
-    .game p { margin: 0; font-size: 12px; text-align: center; color: #333; }
-    noscript { display: block; text-align: center; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; }
+    .brand .logo {
+      display: grid; place-items: center;
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+    }
+    .brand .logo svg { width: 20px; height: 20px; color: #22c55e; }
+    .pills {
+      display: flex; gap: 4px; padding: 4px;
+      border-radius: 999px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+    }
+    .pill {
+      padding: 8px 18px;
+      border: 0; border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font: inherit; font-size: 14px; font-weight: 500;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+    .pill:hover { color: var(--text); }
+    .pill.active { background: rgba(255, 255, 255, 0.12); color: var(--text); }
+    .version { justify-self: end; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+    /* ---------- hero ---------- */
+    .hero { text-align: center; padding: 48px 24px 40px; }
+    .hero .eyebrow { margin: 0 0 6px; font-size: 17px; color: var(--muted); font-weight: 500; }
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(64px, 12vw, 132px);
+      line-height: .95;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      background: linear-gradient(180deg, #ffffff 30%, #a7a3c2);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+    }
+    .chips { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      font-size: 14px; color: var(--text);
+    }
+    .chip b { font-weight: 600; }
+    .chip span { color: var(--muted); }
+
+    /* ---------- panels ---------- */
+    main { max-width: 1240px; margin: 0 auto; padding: 0 24px 64px; }
+    .panel {
+      padding: 22px 22px 24px;
+      border-radius: 24px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+    .panel-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 18px; }
+    .panel-head h2 { margin: 0; font-size: 17px; font-weight: 600; }
+    .panel-head .meta { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+
+    .game {
+      --accent: #8b5cf6;
+      position: relative;
+      display: flex; flex-direction: column; gap: 14px;
+      padding: 20px;
+      border-radius: 20px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: inherit; text-decoration: none;
+      overflow: hidden;
+      transition: transform .18s ease, border-color .18s, background .18s, box-shadow .18s;
+    }
+    .game::before {
+      content: "";
+      position: absolute; inset: -40% -20% auto auto;
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, var(--accent), transparent 70%);
+      opacity: .14;
+      transition: opacity .18s;
+      pointer-events: none;
+    }
+    .game:hover, .game:focus-visible {
+      transform: translateY(-3px);
+      border-color: var(--border-hover);
+      background: var(--panel-hover);
+      box-shadow: 0 18px 40px -18px rgba(0, 0, 0, .7);
+      outline: none;
+    }
+    .game:hover::before { opacity: .28; }
+    .game-top { display: flex; align-items: center; gap: 14px; }
+    .game-icon {
+      flex: none;
+      width: 56px; height: 56px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .06);
+      border: 1px solid var(--border);
+      display: grid; place-items: center;
+    }
+    .game-icon img { width: 40px; height: 40px; }
+    .game h3 { margin: 0; font-size: 18px; font-weight: 600; }
+    .game .category { font-family: var(--mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+    .game p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--muted); }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--text);
+      background: rgba(255, 255, 255, .06);
+      border: 1px solid var(--border);
+    }
+    .play {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: auto; padding-top: 14px;
+      border-top: 1px solid var(--border);
+      font-size: 14px; font-weight: 500;
+    }
+    .play .arrow {
+      display: grid; place-items: center;
+      width: 32px; height: 32px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #0b0b14;
+      transition: transform .18s;
+    }
+    .game:hover .play .arrow { transform: translateX(3px); }
+    .best { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+    .empty { padding: 40px 0; text-align: center; color: var(--muted); font-size: 14px; }
+
+    /* ---------- in-page player ---------- */
+    body.playing .hero { display: none; }
+    body.playing #library { display: none; }
+    body:not(.playing) #player { display: none; }
+    #player { padding: 16px; }
+    #player .panel-head { margin: 4px 6px 14px; align-items: center; }
+    .player-title { display: flex; align-items: center; gap: 12px; }
+    .player-title img { width: 28px; height: 28px; }
+    .player-actions { display: flex; gap: 8px; }
+    .icon-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      font: inherit; font-size: 13px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+    }
+    .icon-btn:hover { background: var(--panel-hover); border-color: var(--border-hover); }
+    .stage {
+      display: flex; justify-content: center;
+    }
+    .frame {
+      /* 5:4 like the game table; as large as the viewport allows */
+      width: min(100%, calc((100vh - 190px) * 1.25));
+      width: min(100%, calc((100dvh - 190px) * 1.25));
+      aspect-ratio: 5 / 4;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .8);
+      background: #000;
+    }
+    .frame iframe { display: block; width: 100%; height: 100%; border: 0; }
+
+    footer { text-align: center; padding: 0 24px 32px; font-size: 12px; color: var(--muted); }
+
+    @media (max-width: 640px) {
+      .topbar { grid-template-columns: 1fr auto; }
+      .pills { display: none; }
+      .hero { padding-top: 24px; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Games</h1>
-    <p>Pick a game to play</p>
+  <header class="topbar">
+    <a class="brand" href="./">
+      <span class="logo">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M7 6h10a5 5 0 0 1 4.9 6l-1 5a3 3 0 0 1-5.2 1.4L14 16h-4l-1.7 2.4A3 3 0 0 1 3.1 17l-1-5A5 5 0 0 1 7 6Zm1 3v1.5H6.5v1.5H8v1.5h1.5V12H11v-1.5H9.5V9H8Zm8.25 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm-2.5 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"/>
+        </svg>
+      </span>
+      Games
+    </a>
+    <nav class="pills" id="filters"></nav>
+    <span class="version" id="version"></span>
   </header>
-  <main id="games">
-    <noscript><a href="games/solitaire/" style="color:#fff">Solitaire</a></noscript>
+
+  <section class="hero">
+    <p class="eyebrow" id="greeting">Welcome</p>
+    <h1>Play.</h1>
+    <div class="chips">
+      <span class="chip"><b id="count">–</b> <span>games available</span></span>
+      <span class="chip"><span>No install · runs in your browser</span></span>
+    </div>
+  </section>
+
+  <main>
+    <section class="panel" id="player">
+      <div class="panel-head">
+        <div class="player-title"><img id="player-icon" alt=""><h2 id="player-name"></h2></div>
+        <div class="player-actions">
+          <button class="icon-btn" id="btn-full" title="Fullscreen"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg> Fullscreen</button>
+          <a class="icon-btn" id="btn-tab" target="_blank" rel="noopener" title="Open in new tab">↗ New tab</a>
+          <a class="icon-btn" href="#/" title="Back to library">✕ Close</a>
+        </div>
+      </div>
+      <div class="stage"><div class="frame" id="frame"></div></div>
+    </section>
+
+    <section class="panel" id="library">
+      <div class="panel-head">
+        <h2>Library</h2>
+        <span class="meta" id="shown"></span>
+      </div>
+      <div class="grid" id="games">
+        <noscript><a href="games/solitaire/">Solitaire</a></noscript>
+      </div>
+    </section>
   </main>
+
+  <footer>Scores are saved in your browser.</footer>
+
   <script>
-    fetch('games.json')
-      .then((r) => r.json())
-      .then((games) => {
-        const root = document.getElementById('games');
-        for (const g of games) {
-          const a = document.createElement('a');
-          a.className = 'game';
-          a.href = g.path;
-          const img = document.createElement('img');
-          img.src = g.icon;
-          img.alt = '';
-          const h = document.createElement('h2');
-          h.textContent = g.name;
-          const p = document.createElement('p');
-          p.textContent = g.description;
-          a.append(img, h, p);
-          root.appendChild(a);
-        }
+    const h = new Date().getHours();
+    document.getElementById('greeting').textContent =
+      (h < 5 ? 'Good night' : h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') +
+      ' · ' + new Date().toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
+
+    fetch('version.txt').then((r) => (r.ok ? r.text() : '')).then((v) => {
+      document.getElementById('version').textContent = v.trim();
+    }).catch(() => {});
+
+    // Optional per-game "best" line, read from what each game stores locally.
+    const bests = {
+      solitaire: () => {
+        const v = JSON.parse(localStorage.getItem('solitaire.highscore') || '0');
+        return v > 0 ? 'best ' + v : '';
+      },
+    };
+
+    const el = (tag, cls, text) => {
+      const e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (text !== undefined) e.textContent = text;
+      return e;
+    };
+
+    let games = [];
+    const grid = document.getElementById('games');
+    const pills = document.getElementById('filters');
+    const frame = document.getElementById('frame');
+
+    function card(g) {
+      const a = el('a', 'game');
+      a.href = '#/' + g.id;
+      if (g.accent) a.style.setProperty('--accent', g.accent);
+      const top = el('div', 'game-top');
+      const icon = el('div', 'game-icon');
+      const img = el('img');
+      img.src = g.icon;
+      img.alt = '';
+      icon.appendChild(img);
+      const titles = el('div');
+      titles.append(el('div', 'category', g.category || ''), el('h3', null, g.name));
+      top.append(icon, titles);
+      const tags = el('div', 'tags');
+      (g.tags || []).forEach((t) => tags.appendChild(el('span', 'tag', t)));
+      const play = el('div', 'play');
+      let best = '';
+      try { best = bests[g.id] ? bests[g.id]() : ''; } catch (e) { /* ignore */ }
+      play.append(el('span', 'best', best || 'Play now'), el('span', 'arrow', '→'));
+      a.append(top, el('p', null, g.description), tags, play);
+      return a;
+    }
+
+    function drawLibrary() {
+      grid.innerHTML = '';
+      document.getElementById('shown').textContent = games.length + (games.length === 1 ? ' game' : ' games');
+      if (!games.length) grid.appendChild(el('div', 'empty', 'Nothing here yet.'));
+      games.forEach((g) => grid.appendChild(card(g)));
+    }
+
+    function drawPills(activeId) {
+      pills.innerHTML = '';
+      [{ id: '', name: 'Library' }, ...games].forEach((g) => {
+        const a = el('a', 'pill' + (g.id === activeId ? ' active' : ''), g.name);
+        a.href = '#/' + g.id;
+        a.style.textDecoration = 'none';
+        pills.appendChild(a);
       });
+    }
+
+    function route() {
+      const id = location.hash.replace(/^#\/?/, '');
+      const g = games.find((x) => x.id === id);
+      if (g) {
+        document.body.classList.add('playing');
+        document.title = g.name + ' · Games';
+        document.getElementById('player-name').textContent = g.name;
+        document.getElementById('player-icon').src = g.icon;
+        document.getElementById('btn-tab').href = g.path;
+        const current = frame.querySelector('iframe');
+        if (!current || current.dataset.id !== g.id) {
+          frame.innerHTML = '';
+          const f = el('iframe');
+          f.src = g.path;
+          f.title = g.name;
+          f.dataset.id = g.id;
+          f.allow = 'fullscreen';
+          f.addEventListener('load', () => f.focus());
+          frame.appendChild(f);
+        }
+        window.scrollTo({ top: 0 });
+      } else {
+        document.body.classList.remove('playing');
+        document.title = 'Games';
+        frame.innerHTML = ''; // stop the game when leaving
+        drawLibrary(); // refresh "best" scores
+      }
+      drawPills(g ? g.id : '');
+    }
+
+    document.getElementById('btn-full').addEventListener('click', () => {
+      const f = frame.querySelector('iframe');
+      if (f && f.requestFullscreen) f.requestFullscreen();
+    });
+
+    // Games can ask to close themselves (e.g. Solitaire's "Exit" menu item).
+    window.addEventListener('message', (e) => {
+      if (e.origin === location.origin && e.data && e.data.type === 'games:exit') location.hash = '#/';
+    });
+
+    window.addEventListener('hashchange', route);
+
+    fetch('games.json').then((r) => r.json()).then((list) => {
+      games = list;
+      document.getElementById('count').textContent = games.length;
+      route();
+    });
   </script>
 </body>
 </html>

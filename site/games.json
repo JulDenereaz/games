@@ -2,8 +2,11 @@
   {
     "id": "solitaire",
     "name": "Solitaire",
-    "description": "Classic Klondike, Windows XP style. Draw One / Draw Three, Standard & Vegas scoring.",
+    "category": "Cards",
+    "description": "Classic Klondike, just like on Windows XP. Drag, double-click, beat the clock.",
+    "tags": ["Draw 1 / 3", "Vegas scoring", "Timed"],
     "path": "games/solitaire/",
-    "icon": "games/solitaire/favicon.png"
+    "icon": "games/solitaire/favicon.png",
+    "accent": "#22c55e"
   }
 ]

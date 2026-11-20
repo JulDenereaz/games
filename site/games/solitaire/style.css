@@ -8,12 +8,26 @@ html, body {
   font-size: 12px;
   user-select: none;
   -webkit-user-select: none;
-  background: #008000;
+  background: #0f0d1a;
 }
 
 body {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at top left, #2a1b3d, #0f0d1a 60%);
+}
+
+/* The table keeps a fixed 5:4 ratio and is letterboxed in the window. */
+#app {
+  display: flex;
   flex-direction: column;
+  width: min(100vw, 125vh);
+  height: min(100vh, 80vw);
+  width: min(100vw, 125dvh);
+  height: min(100dvh, 80vw);
+  background: #008000;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
 /* ---------- Menu bar (XP style) ---------- */

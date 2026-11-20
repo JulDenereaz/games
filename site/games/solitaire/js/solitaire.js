@@ -12,6 +12,7 @@
   const RATIO = 314 / 226;
   const DOUBLE_CLICK_MS = 350;
   const DRAG_THRESHOLD = 4;
+  const MOVE_MS = 140; // must match the transition in style.css
   const isRed = (suit) => suit === 'D' || suit === 'H';
 
   const board = document.getElementById('board');
@@ -406,9 +407,18 @@
     const exhausted = piles.stock.cards.length === 0 && game.passes + 1 >= maxPasses();
     slots.stock.classList.toggle('no-redeal', exhausted);
 
+    const animating = board.classList.contains('animate');
     for (const [c, p] of positions()) {
       c.el.classList.toggle('down', !c.up);
-      place(c.el, p.x, p.y, p.z);
+      const moved = Math.abs(parseFloat(c.el.style.left) - p.x) > 0.5 || Math.abs(parseFloat(c.el.style.top) - p.y) > 0.5;
+      clearTimeout(c.zTimer);
+      if (animating && moved) {
+        // Keep a travelling card above everything until it has landed.
+        place(c.el, p.x, p.y, 1000 + p.z);
+        c.zTimer = setTimeout(() => (c.el.style.zIndex = p.z), MOVE_MS + 40);
+      } else {
+        place(c.el, p.x, p.y, p.z);
+      }
     }
   }
 
@@ -670,7 +680,10 @@
     switch (action) {
       case 'deal': return deal();
       case 'undo': return undo();
-      case 'exit': window.location.href = '../../'; return;
+      case 'exit':
+        if (window.parent !== window) window.parent.postMessage({ type: 'games:exit' }, location.origin);
+        else window.location.href = '../../';
+        return;
       case 'help':
         return openDialog('How to play', `
           <p>Build four piles up by suit, from Ace to King, in the top-right foundations.</p>
