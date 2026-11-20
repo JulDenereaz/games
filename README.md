@@ -7,6 +7,7 @@ site/
 ├── index.html            # game picker (reads games.json)
 ├── games.json            # list of available games
 └── games/
+    ├── minesweeper/      # Minesweeper, Windows XP style (canvas, no image assets)
     └── solitaire/        # Klondike Solitaire, Windows XP style
         ├── index.html
         ├── style.css
@@ -28,7 +29,9 @@ works under a sub-path such as `https://example.com/games/`. The health check is
 ## Adding a game
 
 1. Create `site/games/<name>/` with an `index.html` (plain static files, no build step).
-2. Add an entry to `site/games.json`.
+2. Add an entry to `site/games.json` (`aspect` = width/height of the frame it is shown in on the homepage).
+   If the game has an "exit" action, have it call
+   `window.parent.postMessage({ type: 'games:exit' }, location.origin)` when embedded.
 3. Push to `main`. GitHub Actions builds and publishes the image to `ghcr.io/juldenereaz/games`
    (tagged `latest` and `sha-<commit>`; git tags `v*` also become image tags).
 
@@ -39,3 +42,11 @@ works under a sub-path such as `https://example.com/games/`. The health check is
 - `F2` / `Space` deals a new game, `Ctrl+Z` undoes the last move (one level, like the original)
 - Standard scoring follows the classic rules, including the −2 every 10 s penalty and the 700000 / seconds win bonus
 - The bouncing-card win animation
+
+## Minesweeper
+
+- Beginner (9×9, 10), Intermediate (16×16, 40), Expert (30×16, 99) and Custom fields
+- First click is always safe; left-click opens, right-click flags (and `?` marks, toggleable)
+- Both buttons or middle-click on a number opens its neighbours when enough flags are placed
+- Touch: tap to open, long-press to flag, tap a number to open its neighbours
+- Smiley / `F2` for a new game, best times per level with names (stored in the browser)

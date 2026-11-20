@@ -4,9 +4,29 @@
     "name": "Solitaire",
     "category": "Cards",
     "description": "Classic Klondike, just like on Windows XP. Drag, double-click, beat the clock.",
-    "tags": ["Draw 1 / 3", "Vegas scoring", "Timed"],
+    "tags": [
+      "Draw 1 / 3",
+      "Vegas scoring",
+      "Timed"
+    ],
     "path": "games/solitaire/",
     "icon": "games/solitaire/favicon.png",
-    "accent": "#22c55e"
+    "accent": "#22c55e",
+    "aspect": 1.25
+  },
+  {
+    "id": "minesweeper",
+    "name": "Minesweeper",
+    "category": "Puzzle",
+    "description": "The classic mine hunt: numbers, flags, and that smiley. Your first click is always safe.",
+    "tags": [
+      "Beginner → Expert",
+      "Custom fields",
+      "Best times"
+    ],
+    "path": "games/minesweeper/",
+    "icon": "games/minesweeper/icon.svg",
+    "accent": "#ef4444",
+    "aspect": 1.6
   }
 ]

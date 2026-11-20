@@ -208,10 +208,11 @@
       display: flex; justify-content: center;
     }
     .frame {
-      /* 5:4 like the game table; as large as the viewport allows */
-      width: min(100%, calc((100vh - 190px) * 1.25));
-      width: min(100%, calc((100dvh - 190px) * 1.25));
-      aspect-ratio: 5 / 4;
+      /* per-game ratio (games.json "aspect"); as large as the viewport allows */
+      --ar: 1.25;
+      width: min(100%, calc((100vh - 190px) * var(--ar)));
+      width: min(100%, calc((100dvh - 190px) * var(--ar)));
+      aspect-ratio: var(--ar);
       border-radius: 14px;
       overflow: hidden;
       border: 1px solid var(--border);
@@ -294,6 +295,13 @@
         const v = JSON.parse(localStorage.getItem('solitaire.highscore') || '0');
         return v > 0 ? 'best ' + v : '';
       },
+      minesweeper: () => {
+        const b = JSON.parse(localStorage.getItem('minesweeper.best') || '{}');
+        const t = b.expert && b.expert.time < 999 ? 'expert ' + b.expert.time + 's'
+          : b.intermediate && b.intermediate.time < 999 ? 'intermediate ' + b.intermediate.time + 's'
+          : b.beginner && b.beginner.time < 999 ? 'beginner ' + b.beginner.time + 's' : '';
+        return t ? 'best ' + t : '';
+      },
     };
 
     const el = (tag, cls, text) => {
@@ -357,6 +365,7 @@
         document.getElementById('player-name').textContent = g.name;
         document.getElementById('player-icon').src = g.icon;
         document.getElementById('btn-tab').href = g.path;
+        frame.style.setProperty('--ar', g.aspect || 1.25);
         const current = frame.querySelector('iframe');
         if (!current || current.dataset.id !== g.id) {
           frame.innerHTML = '';

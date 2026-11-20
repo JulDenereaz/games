@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>Minesweeper</title>
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="window">
+    <nav id="menubar">
+      <div class="menu">
+        <span class="menu-title"><u>G</u>ame</span>
+        <ul class="menu-list">
+          <li data-action="new">New<span class="key">F2</span></li>
+          <li class="sep"></li>
+          <li data-level="beginner">Beginner</li>
+          <li data-level="intermediate">Intermediate</li>
+          <li data-level="expert">Expert</li>
+          <li data-level="custom">Custom...</li>
+          <li class="sep"></li>
+          <li data-toggle="marks">Marks (?)</li>
+          <li class="sep"></li>
+          <li data-action="best">Best Times...</li>
+          <li class="sep"></li>
+          <li data-action="exit">Exit to game list</li>
+        </ul>
+      </div>
+      <div class="menu">
+        <span class="menu-title"><u>H</u>elp</span>
+        <ul class="menu-list">
+          <li data-action="help">How to play</li>
+          <li data-action="about">About Minesweeper</li>
+        </ul>
+      </div>
+    </nav>
+    <canvas id="game"></canvas>
+  </div>
+
+  <div id="dialog-backdrop" hidden>
+    <div class="xp-window" role="dialog">
+      <div class="xp-title"><span id="dialog-title">Minesweeper</span><button class="xp-close" data-dialog="close">×</button></div>
+      <div class="xp-body" id="dialog-body"></div>
+      <div class="xp-buttons" id="dialog-buttons"></div>
+    </div>
+  </div>
+
+  <script src="js/minesweeper.js"></script>
+</body>
+</html>
