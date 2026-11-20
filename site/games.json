@@ -1,0 +1,9 @@
+[
+  {
+    "id": "solitaire",
+    "name": "Solitaire",
+    "description": "Classic Klondike, Windows XP style. Draw One / Draw Three, Standard & Vegas scoring.",
+    "path": "games/solitaire/",
+    "icon": "games/solitaire/favicon.png"
+  }
+]

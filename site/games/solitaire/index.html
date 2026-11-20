@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>Solitaire</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav id="menubar">
+    <div class="menu">
+      <span class="menu-title"><u>G</u>ame</span>
+      <ul class="menu-list">
+        <li data-action="deal">Deal<span class="key">F2 / Space</span></li>
+        <li data-action="undo" id="menu-undo">Undo<span class="key">Ctrl+Z</span></li>
+        <li class="sep"></li>
+        <li data-setting="draw" data-value="1">Draw One</li>
+        <li data-setting="draw" data-value="3">Draw Three</li>
+        <li class="sep"></li>
+        <li data-setting="scoring" data-value="standard">Standard scoring</li>
+        <li data-setting="scoring" data-value="vegas">Vegas scoring</li>
+        <li data-setting="scoring" data-value="none">No scoring</li>
+        <li class="sep"></li>
+        <li data-toggle="timed">Timed game</li>
+        <li data-toggle="cumulative">Cumulative Vegas score</li>
+        <li class="sep"></li>
+        <li data-action="exit">Exit to game list</li>
+      </ul>
+    </div>
+    <div class="menu">
+      <span class="menu-title"><u>H</u>elp</span>
+      <ul class="menu-list">
+        <li data-action="help">How to play</li>
+        <li data-action="about">About Solitaire</li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="board">
+    <div class="slot" id="slot-stock"><div class="ring"></div></div>
+    <div class="slot empty-marker" id="slot-waste"></div>
+    <div class="slot" id="slot-f0"></div>
+    <div class="slot" id="slot-f1"></div>
+    <div class="slot" id="slot-f2"></div>
+    <div class="slot" id="slot-f3"></div>
+    <div class="slot" id="slot-t0"></div>
+    <div class="slot" id="slot-t1"></div>
+    <div class="slot" id="slot-t2"></div>
+    <div class="slot" id="slot-t3"></div>
+    <div class="slot" id="slot-t4"></div>
+    <div class="slot" id="slot-t5"></div>
+    <div class="slot" id="slot-t6"></div>
+    <canvas id="cascade"></canvas>
+  </main>
+
+  <footer id="statusbar">
+    <span id="status-msg">For new game, press Space</span>
+    <span class="right">
+      <span id="status-time">Time : 00:00:00</span>
+      <span id="status-high">High Score : 0</span>
+      <span id="status-score">Score : 0</span>
+    </span>
+  </footer>
+
+  <div id="dialog-backdrop" hidden>
+    <div class="xp-window" role="dialog">
+      <div class="xp-title"><span id="dialog-title">Solitaire</span><button class="xp-close" data-dialog="close">×</button></div>
+      <div class="xp-body" id="dialog-body"></div>
+      <div class="xp-buttons" id="dialog-buttons"></div>
+    </div>
+  </div>
+
+  <script src="js/solitaire.js"></script>
+</body>
+</html>

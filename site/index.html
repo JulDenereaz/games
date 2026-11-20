@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Games</title>
+  <link rel="icon" type="image/png" href="games/solitaire/favicon.png">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Tahoma, Verdana, "Segoe UI", sans-serif;
+      background: linear-gradient(#3a6ea5, #245edb 40%, #1941a5);
+      color: #fff;
+    }
+    header {
+      padding: 28px 24px 8px;
+      text-align: center;
+    }
+    header h1 { margin: 0; font-size: 32px; text-shadow: 1px 2px 2px rgba(0,0,0,.4); }
+    header p { margin: 6px 0 0; opacity: .85; }
+    #games {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: 24px auto;
+      padding: 0 20px;
+    }
+    .game {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 20px;
+      text-decoration: none;
+      color: #000;
+      background: #ece9d8;
+      border: 3px solid #0831d9;
+      border-radius: 8px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,.4);
+      transition: transform .12s;
+    }
+    .game:hover { transform: translateY(-3px); }
+    .game img { width: 72px; height: 72px; image-rendering: auto; }
+    .game h2 { margin: 0; font-size: 18px; }
+    .game p { margin: 0; font-size: 12px; text-align: center; color: #333; }
+    noscript { display: block; text-align: center; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Games</h1>
+    <p>Pick a game to play</p>
+  </header>
+  <main id="games">
+    <noscript><a href="games/solitaire/" style="color:#fff">Solitaire</a></noscript>
+  </main>
+  <script>
+    fetch('games.json')
+      .then((r) => r.json())
+      .then((games) => {
+        const root = document.getElementById('games');
+        for (const g of games) {
+          const a = document.createElement('a');
+          a.className = 'game';
+          a.href = g.path;
+          const img = document.createElement('img');
+          img.src = g.icon;
+          img.alt = '';
+          const h = document.createElement('h2');
+          h.textContent = g.name;
+          const p = document.createElement('p');
+          p.textContent = g.description;
+          a.append(img, h, p);
+          root.appendChild(a);
+        }
+      });
+  </script>
+</body>
+</html>
