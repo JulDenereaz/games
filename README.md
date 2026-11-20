@@ -18,11 +18,11 @@ site/
 ## Run
 
 ```sh
-docker run -d -p 8080:8080 --restart unless-stopped ghcr.io/juldenereaz/games:latest
+docker run -d --name games -p 3012:8080 --restart unless-stopped ghcr.io/juldenereaz/games:latest
 # or: docker compose up -d
 ```
 
-Open http://localhost:8080. Put it behind your reverse proxy for your domain. All paths are relative, so it also
+Open http://localhost:3012 (the container listens on 8080 internally; pick any free host port). Put it behind your reverse proxy for your domain. All paths are relative, so it also
 works under a sub-path such as `https://example.com/games/`. The health check is at `/healthz`.
 
 ## Adding a game

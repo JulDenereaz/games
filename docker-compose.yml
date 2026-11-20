@@ -1,7 +1,8 @@
 services:
   games:
+    container_name: games
     image: ghcr.io/juldenereaz/games:latest
     # build: .
     ports:
-      - "8080:8080"
+      - "3012:8080"
     restart: unless-stopped
